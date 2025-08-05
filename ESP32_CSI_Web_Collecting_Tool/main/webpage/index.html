@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+     
+    <script src="jquery-3.3.1.min.js"></script>
+    <script async src="app.js"></script>
+
+    <title>CSI ESP32 Collector</title>
+    <style>
+        .comserial {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .selector-for-some-widget {
+            box-sizing: content-box;
+        }
+       
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <h1 class="display-6 text-primary">ESP32 CSI Web Collecting Tool<img src="esp32.png" style="max-width: 5%; height: auto;">
+        </h1>
+        
+       </div>
+    <br>
+    <div class="container" id="successMessage" style="display: none;">
+        <p>You have successfully submitted the form!</p>
+        <button id="returnButton" class="btn btn-primary">Return to Form</button>
+    </div>
+
+    <form id="yourFormId" action="/submit" method="post" enctype="application/json" class="container needs-validation" novalidate>
+        <h3>General Configuration</h3>
+        <div class="row">
+            <div class="col-md-auto">
+                <label for="op_modes">Operation Mode:</label>
+                <select name="op_modes" id="op_modes" class="form-control">
+                    <option value="1">Receiver</option>
+                    <option value="2">Transmitter</option>
+                    <!-- Add options as needed -->
+                </select>
+            </div>
+            <div class="form-group">
+            <div id="mac" class="col-md-auto">
+                <label for="macAddress">MAC Address:</label>
+                <input class="form-control" type="text" id="macAddress" placeholder="00:B0:D0:63:C2:26" name="macAddress" required>
+                <div class="invalid-feedback">Please enter a MAC address.</div>
+            </div>
+        </div>
+            <div id="band" class="col-md-auto" hidden>
+                <label for="bandwidth">Bandwidth:</label>
+                <select id="bandwidth" name="bandwidth" class="form-control">
+                    <option value="1">20 Mhz</option>
+                    <option value="2">40 Mhz</option>
+                </select>
+            </div>
+            <div id="rate" class="col-md-auto">
+                <label for="frecuencia">Packet Rate:</label>
+                <input type="text" id="frecuencia" name="frecuencia" class="form-control">
+                <div class="invalid-feedback">Please enter the rate</div>
+            </div>
+        </div>
+
+        <!-- Repeat similar structure for other fields -->
+        <br>
+
+        <div class="row">
+            <div id="wifi" class="col">
+                <label for="comm">Wi-Fi Channel:</label>
+                <select name="communication" id="comm" class="form-control">
+                    <script>
+                        for (var i = 1; i <= 20; i++) {
+                            document.write('<option value="' + i + '">' + i + '</option>');
+                        }
+                    </script>
+                </select>
+            </div>
+           
+            <div id="sample" class="col">
+                <label>Sample Representation:</label><br>
+                <div class="form-check">
+                    <input type="radio" id="ASCII" name="muestra" value="1" class="form-check-input" required>
+                    <label for="ASCII" class="form-check-label">ASCII</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="binario" name="muestra" value="2" class="form-check-input" required>
+                    <label for="binario" class="form-check-label">Binary</label>
+                </div>
+                <div class="invalid-feedback">Please provide the Sample Representation.</div>
+            </div>
+        </div>
+        <br>
+        <!-- Add checkboxes for each field -->
+        <div id="message">
+            <h3>Message Structure</h3>
+            <div class="row">
+                <div class="col">
+                    <div class="form-check">
+                        <input type="checkbox" id="macAddressf" name="macAddressf" class="form-check-input">
+                        <label for="macAddressf" class="form-check-label">MAC address Source</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="csiBuf" name="csiBuf" class="form-check-input">
+                        <label for="csiBuf" class="form-check-label">CSI buf</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="rssi" name="rssi" class="form-check-input">
+                        <label for="rssi" class="form-check-label">RSSI</label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-check">
+                        <input type="checkbox" id="channelBandwidth" name="channelBandwidth" class="form-check-input">
+                        <label for="channelBandwidth" class="form-check-label">Channel Bandwidth of packet</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="noiseFloor" name="noiseFloor" class="form-check-input">
+                        <label for="noiseFloor" class="form-check-label">Noise Floor of Radio Frequency Module (dBm)</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="timestamp" name="timestamp" class="form-check-input">
+                        <label for="timestamp" class="form-check-label">Timestamp (µs)</label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-check">
+                        <input type="checkbox" id="antennaNumber" name="antennaNumber" class="form-check-input">
+                        <label for="antennaNumber" class="form-check-label">Antenna number from which packet was received</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="csiDataLength" name="csiDataLength" class="form-check-input">
+                        <label for="csiDataLength" class="form-check-label">Length of CSI data</label>
+                    </div>
+                </div>
+            </div>
+            <div class="invalid-feedback">Please check at least one option in the Message Structure section</div>
+        </div>
+        <br>
+        <div id="info-mode">
+            <h3>Informer Mode</h3>
+            <div class="row">
+                <div class="col">
+                    <label for="informer_mode">Select one:</label>
+                    <select name="informer_mode" id="informer_mode" class="form-control">
+                        <option value="1">CONSOLE</option>
+                        <option value="2">SD</option>
+                        <option value="3">UART SERIAL COMMUNICATION</option>
+                        <option value="4">OCTAL SPI SERIAL COMMUNICATION</option>
+                        <!-- Add options as needed -->
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="container" id="sdSection" style="display: none;">
+                <h3>SD</h3>
+                <div class="row">
+                    <div class="col">
+                        <label for="miso">MISO (1 to 32):</label>
+                        <input type="number" id="miso" name="miso" class="form-control" min="1" max="32">
+                    </div>
+                    <div class="col">
+                        <label for="mosi">MOSI (1 to 32):</label>
+                        <input type="number" id="mosi" name="mosi" class="form-control" min="1" max="32">
+                    </div>
+                    <div class="col">
+                        <label for="clk">CLK (1 to 32):</label>
+                        <input type="number" id="clk" name="clk" class="form-control" min="1" max="32">
+                    </div>
+                    <div class="col">
+                        <label for="cs">CS (1 to 32):</label>
+                        <input type="number" id="cs" name="cs" class="form-control" min="1" max="32">
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container" id="uartcommserialSection" style="display: none;">
+                <h3>UART Serial Communication:</h3>
+                <div class="row">
+                    <div class="col">
+                        <label for="baudrate">Baudrate:</label>
+                        <input type="number" id="baudrate" name="baudrate" class="form-control" >
+                    </div>
+                    <div class="col">
+                        <label for="tx">TX (1 to 32):</label>
+                        <input type="number" id="tx" name="tx" class="form-control" min="1" max="32">
+                    </div>
+                    <div class="col">
+                        <label for="rx">RX (1 to 32):</label>
+                        <input type="number" id="rx" name="rx" class="form-control" min="1" max="32">
+                    </div>
+                </div>
+            </div>
+            <div class="container" id="spicommserialSection">
+                <h3>Octal SPI Serial Communication:</h3>
+                <div class="row">
+                    <div class="col">
+                        <label for="data_0">Data 0:</label>
+                        <input type="number" id="data_0" name="data_0" class="form-control" >
+                    </div>
+                    <div class="col">
+                        <label for="data_1">Data 1:</label>
+                        <input type="number" id="data_1" name="data_1" class="form-control" min="1" max="32">
+                    </div>
+                    <div class="col">
+                        <label for="data_2">Data 2:</label>
+                        <input type="number" id="data_2" name="data_2" class="form-control" min="1" max="32">
+                    </div><div class="col">
+                        <label for="data_3">Data 3:</label>
+                        <input type="number" id="data_3" name="data_3" class="form-control" min="1" max="32">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="data_4">Data 4:</label>
+                        <input type="number" id="data_4" name="data_4" class="form-control" >
+                    </div>
+                    <div class="col">
+                        <label for="data_5">Data 5:</label>
+                        <input type="number" id="data_5" name="data_5" class="form-control" min="1" max="32">
+                    </div>
+                    <div class="col">
+                        <label for="data_6">Data 6:</label>
+                        <input type="number" id="data_6" name="data_6" class="form-control" min="1" max="32">
+                    </div><div class="col">
+                        <label for="data_7">Data 7:</label>
+                        <input type="number" id="data_7" name="data_7" class="form-control" min="1" max="32">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="sclk">SCLK:</label>
+                        <input type="number" id="sclk" name="sclk" class="form-control" >
+                    </div>
+                    <div class="col">
+                        <label for="cs">CS:</label>
+                        <input type="number" id="cs_spi" name="cs_spi" class="form-control" min="1" max="32">
+                    </div>
+                    <div class="col">
+                        <label for="handshake">Handshake:</label>
+                        <input type="number" id="handshake" name="handshake" class="form-control" min="1" max="32">
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div id="processing-section">
+
+        </div>
+
+        <div class="text-right">
+        <input type="submit" class="btn btn-primary" id="submit_button" value="Submit">
+        </div>
+    </form>
+    <br>
+</body>
+
+</html>
