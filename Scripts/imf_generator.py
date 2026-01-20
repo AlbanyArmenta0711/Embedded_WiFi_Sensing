@@ -6,7 +6,7 @@ synthetic numpy files.
 """
 
 import sys
-sys.path.append("../utils")
+#sys.path.append("../utils")
 import os
 from PyEMD import EEMD
 #from PyEMD import EMD
@@ -16,10 +16,20 @@ import pandas as pd
 import time
 from CSI import CSI
 
-CLASSES = ["WA"]
-REMAINING_SUBJECTS = ["s17", "s19", "s21", "s22", "s23", "s24", "s2", "s3", "s4", "s5", "s6", "s7","s8","s9"]
+#    1 - FA
+#    2 - GU
+#    3 - LD
+#    4 - SD 
+#    5 - WA
+
+"""
+Calculating the IMF through EMD is an exhaustive task. Thus, CLASSES and REMAINING_SUBJECTS arrays can be used to only process
+samples for an specific activity or subject if desired. 
+"""
+CLASSES = ["WA", "GU", "LD", "SD", "FA"] 
+REMAINING_SUBJECTS = ["s1", "s2", "s3", "s4", "s5", "s6", "s7","s8","s9","s10","s11","s12","s13","s14","s15","s16","s17","s18","s19","s21","s22","s23","s24"]
 IMFS_TO_EXTRACT = 7 #last IMFs shown is the residual
-K_SUBCARRIERS = 10 #number of sensitive subcarriers to use 
+K_SUBCARRIERS = 10 #number of sensitive subcarriers to use (can be ignored)
 TRUNCATE_SAMPLES = 850
 SAVE_PATH = "./imfs_per_subject/"
 USED_SUBCARRIERS = 52
@@ -29,7 +39,7 @@ activity_dataset = np.array([])
 t = np.linspace(start = 0, stop = TRUNCATE_SAMPLES, num = TRUNCATE_SAMPLES)
 
 for idx, activity in enumerate(CLASSES):
-    activity_path = "../Datasets/RAW/" + activity +"/"
+    activity_path = "../Datasets/Activity/" + activity +"/"
     subjects_list = os.listdir(activity_path)
 
     for subject in REMAINING_SUBJECTS:

@@ -4,7 +4,7 @@ from numpy files
 """
 
 import sys
-sys.path.append("../utils")
+#sys.path.append("../utils")
 import os
 import numpy as np
 import time

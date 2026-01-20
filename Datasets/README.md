@@ -24,3 +24,5 @@ Two subdirectories can be found in this directory:
 Numpy files *x_trn.npy* and *y_trn.npy* correspond to CSI amplitude of the 64 subcarriers calculated from Raw CSI files contained in the **Activity/** directory
 
 ## Usage
+
+Both activity and breathing dataset can be used for the development of Wi-Fi sensing applications or to replicate the methodology and results presented in the paper. For the latter, it is necessary to refer to the Scripts directory of this repository.

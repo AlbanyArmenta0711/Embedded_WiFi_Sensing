@@ -33,7 +33,7 @@ for subject in subject_list:
                     else:
                         artificial_sample[:,imf_idx,:] = dest_data[:, imf_idx, :]
 
-                save_path = "./thesis_environment/data_augmentation/synthetic_samples/" + activity + "/" + subject +"_" + str(src_idx) + "-" + str(dest_idx)
+                save_path = "./synthetic_samples/" + activity + "/" + subject +"_" + str(src_idx) + "-" + str(dest_idx)
                 np.save(save_path, artificial_sample)
                 test_saved = np.load(save_path + ".npy")
                 print("File " + save_path + " saved with shape " + str(test_saved.shape) + 
